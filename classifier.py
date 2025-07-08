@@ -1,19 +1,13 @@
-def classify_bloom_levels(text):
-    text = text.lower()
+from sentence_transformers import SentenceTransformer, util
 
-    # Simple keyword rules based on Bloom’s Taxonomy verbs
-    rules = {
-        "Remembering": ["define", "list", "recall", "identify", "label", "name", "state"],
-        "Understanding": ["describe", "explain", "summarize", "interpret", "classify", "discuss"],
-        "Applying": ["solve", "use", "demonstrate", "implement", "apply", "carry out"],
-        "Analyzing": ["differentiate", "analyze", "compare", "contrast", "distinguish", "organize"],
-        "Evaluating": ["evaluate", "justify", "critique", "argue", "defend", "assess"],
-        "Creating": ["design", "create", "develop", "construct", "formulate", "compose"]
-    }
+# Load your fine-tuned model
+model = SentenceTransformer('fine_tuned_model')
 
-    for level, keywords in rules.items():
-        for kw in keywords:
-            if kw in text:
-                return level
+def classify_question(question, slo_texts):
+    question_embedding = model.encode(question, convert_to_tensor=True)
+    slo_embeddings = model.encode(slo_texts, convert_to_tensor=True)
 
-    return "Unclassified"
+    cosine_scores = util.pytorch_cos_sim(question_embedding, slo_embeddings)
+    best_score, best_idx = float(cosine_scores.max()), int(cosine_scores.argmax())
+
+    return best_score, slo_texts[best_idx]
