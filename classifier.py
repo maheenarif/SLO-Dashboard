@@ -1,7 +1,7 @@
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer
 
-# Load your fine-tuned model
-model = SentenceTransformer('maheenarif/slo-matching-model')
+model = SentenceTransformer("maheen9/slo-matching-model")
+
 
 
 def classify_question(question, slo_texts):
