@@ -1,7 +1,8 @@
 from sentence_transformers import SentenceTransformer, util
 
 # Load your fine-tuned model
-model = SentenceTransformer('fine_tuned_model')
+model = SentenceTransformer('maheenarif/slo-matching-model')
+
 
 def classify_question(question, slo_texts):
     question_embedding = model.encode(question, convert_to_tensor=True)
